@@ -2,6 +2,13 @@
 name = "terminal-invaders"
 version = "0.1.0"
 edition = "2021"
+description = "Terminal Space Invaders-style arcade game"
+license = "MIT"
+repository = "https://github.com/ronenmagid/terminal-invaders"
+homepage = "https://github.com/ronenmagid/terminal-invaders"
+readme = "README.md"
+keywords = ["arcade", "game", "terminal", "tui"]
+categories = ["command-line-utilities", "games"]
 
 [dependencies]
 crossterm = "0.28"

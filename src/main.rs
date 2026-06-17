@@ -1,4 +1,7 @@
+use std::env;
+use std::ffi::OsStr;
 use std::io::{self, Stdout, Write};
+use std::process;
 use std::time::{Duration, Instant};
 
 use crossterm::{
@@ -26,6 +29,20 @@ const PLAYER_RESPAWN_SECONDS: f32 = 2.0;
 const WAVE_CLEAR_PAUSE_SECONDS: f32 = 2.0;
 const LAST_INVADER_TRAVERSE_SECONDS: f32 = 1.5;
 const TICK: Duration = Duration::from_millis(33);
+const HELP: &str = "\
+Terminal Invaders
+
+Usage:
+  terminal-invaders [--help] [--version]
+
+Controls:
+  Enter          start / restart
+  Left, Right    move
+  Space          fire
+  P              pause
+  S              sound on/off
+  Q, Esc         quit
+";
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 struct Point {
@@ -773,6 +790,12 @@ fn explosion_sprite(effect: &Effect) -> &'static [&'static str] {
 }
 
 fn main() -> io::Result<()> {
+    match handle_cli_args() {
+        CliAction::Run => {}
+        CliAction::ExitOk => return Ok(()),
+        CliAction::ExitErr => process::exit(2),
+    }
+
     let mut terminal = Terminal::enter()?;
     let mut game = Game::new();
     let mut last_tick = Instant::now();
@@ -797,6 +820,35 @@ fn main() -> io::Result<()> {
 
         std::thread::sleep(Duration::from_millis(2));
     }
+}
+
+enum CliAction {
+    Run,
+    ExitOk,
+    ExitErr,
+}
+
+fn handle_cli_args() -> CliAction {
+    let args: Vec<_> = env::args_os().skip(1).collect();
+    if args.is_empty() {
+        return CliAction::Run;
+    }
+
+    if args.len() == 1 {
+        let arg = &args[0];
+        if arg == OsStr::new("--version") || arg == OsStr::new("-V") {
+            println!("terminal-invaders {}", env!("CARGO_PKG_VERSION"));
+            return CliAction::ExitOk;
+        }
+
+        if arg == OsStr::new("--help") || arg == OsStr::new("-h") {
+            print!("{HELP}");
+            return CliAction::ExitOk;
+        }
+    }
+
+    eprintln!("unknown argument. Try `terminal-invaders --help`.");
+    CliAction::ExitErr
 }
 
 struct Terminal {

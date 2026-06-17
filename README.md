@@ -8,6 +8,32 @@ A Rust terminal Space Invaders-style arcade game.
 cargo run
 ```
 
+## Install
+
+Build from source with Cargo:
+
+```sh
+cargo install --git https://github.com/ronenmagid/terminal-invaders
+```
+
+After a Homebrew tap is published:
+
+```sh
+brew install ronenmagid/tap/terminal-invaders
+```
+
+## Release
+
+Releases are tagged with semantic versions:
+
+```sh
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The release workflow builds macOS, Linux, and Windows binaries. The Homebrew
+formula template lives in `packaging/homebrew/`.
+
 ## Controls
 
 - `Enter`: start / restart
