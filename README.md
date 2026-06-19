@@ -1,5 +1,7 @@
 # Terminal Invaders
 
+![Terminal Invaders gameplay screenshot](docs/assets/terminal-invaders-screenshot.png)
+
 A Rust terminal Space Invaders-style arcade game.
 
 ## Run
